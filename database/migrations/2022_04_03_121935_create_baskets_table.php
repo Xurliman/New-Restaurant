@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateBasketsTable extends Migration
 {
@@ -14,11 +16,13 @@ class CreateBasketsTable extends Migration
     public function up()
     {
         Schema::create('baskets', function (Blueprint $table) {
-
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Product::class);
-            $table->double('total_price');
+            $table->foreignIdFor(Room::class);
+            $table->integer('people')->default(2);
+            $table->timestamp('date')->nullable();
+            $table->double('price');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

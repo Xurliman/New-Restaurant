@@ -19,14 +19,12 @@ class AuthController extends Controller
         if ($validation->fails()) {
             return ResponseController::error($validation->errors()->first(), 422);
         }
-
         $user = User::create([
             'name' => $request->name,
-            'phone' => $request->phone
+            'phone' => $request->phone,
+            'role' => $request->role ?? 'user'
         ]);
-
         $token = $user->createToken('myapptoken')->plainTextToken;
-
         return ResponseController::response([
             'user' => $user,
             'token' => $token
@@ -39,9 +37,7 @@ class AuthController extends Controller
         if (!$user or $user->name != $request->name) {
             return ResponseController::error('Credentials do not match our records!', Response::HTTP_UNAUTHORIZED);
         }
-
         $token = $user->createToken('Personal access token')->plainTextToken;
-
         return ResponseController::response([
             'user' => $user,
             'token' => $token

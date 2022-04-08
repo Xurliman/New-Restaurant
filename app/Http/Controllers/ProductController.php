@@ -15,67 +15,58 @@ class ProductController extends Controller
 {
     public function create(Request $request)
     {
+        $user = $request->user();
+        if (!AdminController::check($user)) {
+            return ResponseController::error('Permission denied, not admin', 403);
+        }
+
         $validation = Validator::make($request->all(), [
-            'category_id'=>'required',
+            'category_id'=>'required|exists:categories,id',
             'name'=>'required|min:4|max:30|unique:products,name',
             'description'=>'required|min:4|max:255',
             'price'=>'required|numeric|min:1',
-            'images'=>'required|image',
+            'images'=> 'required'
         ]);
-
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);
         }
-
-        $images = $request->images;
-        $path = ImageController::create($images);
         
         Product::create([
             'category_id'=>$request->category_id,
             'name'=>$request->name,
             'description'=>$request->description,
             'price'=>$request->price,
-            'images'=>$path
-
+            'images'=>$request->images
         ]);
-
         return ResponseController::success('Product has been successfully created');
     }
 
     public function edit(Request $request, $product_id)
     {
-
+        $user = $request->user();
+        if (!AdminController::check($user)) {
+            return ResponseController::error('Permission denied, not admin', 403);
+        }
         $product = Product::where('id', $product_id)->first();
-
         if (!$product) {
             return ResponseController::error('Product that has this kind of id, does not exist', 404);
         }
-
         if (empty($request->all())) {
             return ResponseController::error("At least one field should be given to update");
         }
-
         $product->update($request->all());
-        
-        // if ($request->images) {
-        //     $images = $request->images ?? $request->image;
-        //     $fileName = $product->images;
-        //     ImageController::deleteFile($fileName, 'products');
-        //     $path = ImageController::create($images);
-        //     $product->update([
-        //         'images' => $images
-        //     ]);
-        // }
-        
         return ResponseController::success('Product has been successfully edited');
     }
 
-    public function delete($product_id)
+    public function delete(Request $request, $product_id)
     {
+        $user = $request->user();
+        if (!AdminController::check($user)) {
+            return ResponseController::error('Permission denied, not admin', 403);
+        }
         if (Product::find($product_id)) {
             ResponseController::error('Product not found', 404);
         }
-
         Product::destroy($product_id);
         return ResponseController::success('Product has successfully been deleted');
     }
@@ -88,7 +79,6 @@ class ProductController extends Controller
             ->join('categories', 'categories.id', 'products.category_id')
             ->get());
         $data = $productWithCat->groupBy('category_name');
-        
         return ResponseController::response($data);
     }
 
@@ -112,5 +102,21 @@ class ProductController extends Controller
             'images' => $product->images
         ];
         return ResponseController::response($oneProduct);
+    }
+
+    public function view(){
+        $product = Product::all();
+        $data = [];
+        foreach ($product as $value) {
+            $data[] = [
+                'id' => $value->id,
+                'category_id' => $value->category_id,
+                'product_name' => $value->name,
+                'description' => $value->description,
+                'price' => $value->price,
+                'images' => $value->images,
+            ];
+        }
+        return ResponseController::response($data);
     }
 }

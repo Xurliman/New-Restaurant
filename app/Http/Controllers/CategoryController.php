@@ -11,10 +11,13 @@ class CategoryController extends Controller
 {
     public function create(Request $request)
     {
+        $user = $request->user();
+        if (!AdminController::check($user)) {
+            return ResponseController::error('Permission denied, not admin', 403);
+        }
         $validation = Validator::make($request->all(), [
             'name'=>'required|min:4|unique:categories,name'
         ]);
-        
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);
         }
@@ -27,20 +30,26 @@ class CategoryController extends Controller
 
     public function edit(Request $request, $category_id)
     {
+        $user = $request->user();
+        if (!AdminController::check($user)) {
+            return ResponseController::error('Permission denied, not admin', 403);
+        }
         $category = Category::where('id', $category_id)->first();
-        
         if (!$category) {
             return ResponseController::error('Category that has this id dos not exist', 404);
         }
         $category->update([
                 'name' => trim($request->name) ?? $category->name
             ]);
-
         return ResponseController::success('Category has been successfully edited', 200);
     }
 
-    public function delete($cat_id)
+    public function delete(Request $request, $cat_id)
     {
+        $user = $request->user();
+        if (!AdminController::check($user)) {
+            return ResponseController::error('Permission denied, not admin', 403);
+        }
         if (!Category::find($cat_id)) {
             return ResponseController::error('Category not found', 404);
         }
