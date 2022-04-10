@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/order', [OrderController::class, 'create']);
     Route::post('/make/room', [OrderController::class, 'makeRoom']);
     Route::patch('/edit/room/{room_id}', [OrderController::class, 'editRoom']);
+    Route::delete('/delete/room/{room_id}', [OrderController::class, 'deleteRoom']);
 
     Route::post('/create/category', [CategoryController::class, 'create']);
     Route::patch('/edit/category/{cat_id}', [CategoryController::class, 'edit']);
