@@ -25,6 +25,14 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/images', [ImageController::class, 'store']);
 
     Route::post('/order', [OrderController::class, 'create']);
+    Route::get('/single/order/{order_id}', [OrderController::class, 'singleOrder']);
+
+    Route::get('/single/basket/{basket_id}', [OrderController::class, 'singleBasket']);
+    Route::delete('/cancel/basket/{basket_id}', [OrderController::class, 'cancelBasket']);
+    Route::get('/history', [OrderController::class, 'completedHistory']);
+    Route::put('/complete/basket/{basket_id}', [OrderController::class, 'completeBasket']);
+    Route::get('/all/baskets/{user_id}', [OrderController::class, 'allBasketsOfUser']);
+
     Route::post('/make/room', [OrderController::class, 'makeRoom']);
     Route::patch('/edit/room/{room_id}', [OrderController::class, 'editRoom']);
     Route::delete('/delete/room/{room_id}', [OrderController::class, 'deleteRoom']);
@@ -57,5 +65,5 @@ Route::get('/product/{product_id}', [ProductController::class, 'singleProduct'])
 Route::get('/category/product', [ProductController::class, 'showWithCat']);
 
 Route::get('/view-orders', [OrderController::class, 'viewOrders']);
-Route::get('/view-baskets', [OrderController::class, 'viewBasket']);
+Route::get('/view-baskets', [OrderController::class, 'viewAllBaskets']);
 Route::get('/view-rooms', [OrderController::class, 'viewRooms']);

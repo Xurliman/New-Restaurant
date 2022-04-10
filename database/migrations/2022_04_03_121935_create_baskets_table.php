@@ -23,6 +23,7 @@ class CreateBasketsTable extends Migration
             $table->timestamp('date')->nullable();
             $table->double('price');
             $table->boolean('is_active')->default(false);
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }
