@@ -15,4 +15,8 @@ class Category extends Model
         'created_at' => 'datetime:Y-m-d H:00',
         'updated_at' => 'datetime:Y-m-d H:00',
     ];
+
+    public function product(){
+        return $this->hasMany(Product::class);
+    }
 }

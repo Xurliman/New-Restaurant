@@ -29,9 +29,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/single/order/{order_id}', [OrderController::class, 'singleOrder']);
     Route::get('/view-orders', [OrderController::class, 'viewOrders']);
 
-    Route::delete('/cancel/basket/{basket_id}', [OrderController::class, 'cancelBasket']);
+    Route::delete('/delete/basket/{basket_id}', [OrderController::class, 'deleteBasket']);
     Route::patch('/edit/basket/{basket_id}', [OrderController::class, 'editBasket']);
-    Route::put('/complete/basket/{basket_id}', [OrderController::class, 'completeBasket']);
     Route::get('/history', [OrderController::class, 'completedHistory']);
     Route::get('/single/basket/{basket_id}', [OrderController::class, 'singleBasket']);
     Route::get('/all/baskets/{user_id}', [OrderController::class, 'allBasketsOfUser']);

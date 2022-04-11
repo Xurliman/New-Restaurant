@@ -45,38 +45,24 @@ class OrderController extends Controller
         return ResponseController::success('Successfully created');
     }
 
-    public function cancelBasket($basket_id){
+    public function deleteBasket($basket_id){
         $basket = Basket::find($basket_id);
         if (!$basket) {
             return ResponseController::error('Basket not found', 404);
         }
-        $basket->update([
-            'status' => "cancelled"
-        ]);
-        return ResponseController::success('Basket otmenit etildi');
+        $basket->delete();
+        return ResponseController::success('Basket deleted successfully');
     }
 
     public function completedHistory()
     {
         $completedBaskets = DB::table('baskets')
-            ->where('status', 'finished')
+            ->whereNotNull('deleted_at')
             ->get();
         if (!$completedBaskets) {
             return ResponseController::error('There are no completed baskets', 404);
         }
         return ResponseController::response($completedBaskets);
-    }
-
-    public function completeBasket($basket_id)
-    {
-        $basket = Basket::find($basket_id);
-        if (!$basket) {
-            return ResponseController::error('Basket not found', 404);
-        }
-        $basket->update([
-            'status' => "finished"
-        ]);
-        return ResponseController::success('Basket completed');
     }
 
     public function allBasketsOfUser($user_id)
