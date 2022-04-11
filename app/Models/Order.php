@@ -15,4 +15,17 @@ class Order extends Model
         'product_id',
         'count'
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:00',
+        'updated_at' => 'datetime:Y-m-d H:00',
+    ];
+
+    public function basket(){
+        return $this->hasMany(Basket::class);
+    }
+
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
 }

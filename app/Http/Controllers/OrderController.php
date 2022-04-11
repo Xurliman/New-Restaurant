@@ -19,7 +19,6 @@ class OrderController extends Controller
     public function create(Request $request){
         $validation = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
-            'basket_id' => 'required',
             'room_id' => 'required|exists:rooms,id',
             'people' => 'numeric',
             'price' => 'required',
@@ -47,17 +46,20 @@ class OrderController extends Controller
     }
 
     public function cancelBasket($basket_id){
-        if (!Basket::find($basket_id)) {
+        $basket = Basket::find($basket_id);
+        if (!$basket) {
             return ResponseController::error('Basket not found', 404);
         }
-        Basket::destroy($basket_id);
+        $basket->update([
+            'status' => "cancelled"
+        ]);
         return ResponseController::success('Basket otmenit etildi');
     }
 
     public function completedHistory()
     {
         $completedBaskets = DB::table('baskets')
-            ->whereNotNull('deleted_at')
+            ->where('status', 'finished')
             ->get();
         if (!$completedBaskets) {
             return ResponseController::error('There are no completed baskets', 404);
@@ -72,7 +74,7 @@ class OrderController extends Controller
             return ResponseController::error('Basket not found', 404);
         }
         $basket->update([
-            'is_active' => true
+            'status' => "finished"
         ]);
         return ResponseController::success('Basket completed');
     }
@@ -106,9 +108,8 @@ class OrderController extends Controller
     
     public function viewAllBaskets()
     {
-        $basket = Basket::all();
-
-        return ResponseController::response($basket);
+        $baskets= Basket::all();
+        return ResponseController::response($baskets);
     }
     
     public function viewOrders()
@@ -161,8 +162,7 @@ class OrderController extends Controller
         if (!$room) {
             return ResponseController::error('Room that has this id does not exist', 404);
         }
-
-        $room->update([$request->all()]);
+        $room->update($request->all());
         return ResponseController::success('Room has been successfully edited');
     }
 
@@ -179,4 +179,18 @@ class OrderController extends Controller
         Room::destroy($room_id);
         return ResponseController::success("Room has been successfully deleted");
     }   
+
+    public function editBasket(Request $request, $basket_id)
+    {
+        $user = $request->user();
+        if (!AdminController::check($user)) {
+            return ResponseController::error('Permission denied, not admin', 403);
+        }
+        $basket = Basket::find($basket_id);
+        if (!$basket) {
+            return ResponseController::error('Basket that has this id does not exist', 404);
+        }
+        $basket->update($request->all());
+        return ResponseController::success('Basket updated successfully');
+    }
 }

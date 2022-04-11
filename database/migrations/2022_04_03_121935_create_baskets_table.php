@@ -22,9 +22,9 @@ class CreateBasketsTable extends Migration
             $table->integer('people')->default(2);
             $table->timestamp('date')->nullable();
             $table->double('price');
-            $table->boolean('is_active')->default(false);
-            $table->timestamp('deleted_at')->nullable();
+            $table->enum('status', ['finished', 'canceled', 'waiting'])->default('waiting');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

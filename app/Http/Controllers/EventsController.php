@@ -65,6 +65,7 @@ class EventsController extends Controller
         }
         
         Event::destroy($event_id);
+        
         return ResponseController::success('Event has been successfully deleted');
     }
 
@@ -73,7 +74,7 @@ class EventsController extends Controller
         if (empty(Event::all())) {
             return ResponseController::error('Event list is empty', 404);
         }
-        $data = collect(Event::select('id', 'title', 'description', 'images')->get()->toArray());
+        $data = Event::select('id', 'title', 'description', 'images')->get()->toArray();
         $events = [];
         foreach ($data as $item) {
             $events[] = [

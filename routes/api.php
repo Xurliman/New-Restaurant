@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BasketController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\ImageController;
@@ -29,11 +30,12 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/view-orders', [OrderController::class, 'viewOrders']);
 
     Route::delete('/cancel/basket/{basket_id}', [OrderController::class, 'cancelBasket']);
+    Route::patch('/edit/basket/{basket_id}', [OrderController::class, 'editBasket']);
     Route::put('/complete/basket/{basket_id}', [OrderController::class, 'completeBasket']);
     Route::get('/history', [OrderController::class, 'completedHistory']);
     Route::get('/single/basket/{basket_id}', [OrderController::class, 'singleBasket']);
     Route::get('/all/baskets/{user_id}', [OrderController::class, 'allBasketsOfUser']);
-    Route::get('/view-baskets', [OrderController::class, 'viewAllBaskets']);
+    Route::get('/view-baskets', [BasketController::class, 'index']);
 
     Route::post('/make/room', [OrderController::class, 'makeRoom']);
     Route::patch('/edit/room/{room_id}', [OrderController::class, 'editRoom']);

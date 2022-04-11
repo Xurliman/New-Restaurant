@@ -74,11 +74,18 @@ class ProductController extends Controller
     public function showWithCat()
     {
         $data = [];
-        $productWithCat = collect(DB::table('products')
-            ->select('products.id', 'products.category_id', 'categories.name as category_name', 'products.name', 'products.description', 'products.price', 'products.images')
-            ->join('categories', 'categories.id', 'products.category_id')
-            ->get());
-        $data = $productWithCat->groupBy('category_name');
+        $categories = Category::all();
+        foreach ($categories as $category) {
+            $products = collect(Product::select('id as product_id', 'name as product_name', 'description', 'price', 'images')
+                ->where('category_id', $category->id)
+                ->get()
+                ->toArray());
+            $data[] = [
+                'category_id'=>$category->id,
+                'category_name'=>$category->name,
+                'products'=>$products,
+            ]; 
+        } 
         return ResponseController::response($data);
     }
 
