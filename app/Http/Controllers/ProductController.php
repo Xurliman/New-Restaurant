@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Controllers\ResponseController;
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -139,6 +140,18 @@ class ProductController extends Controller
 
     public function iRecommend()
     {
-        
+        $data['latest'] = ProductResource::collection(Product::with("category")
+            ->latest()
+            ->limit(3)
+            ->get()
+        );
+
+        $data['most_expensive'] = ProductResource::collection(Product::with("category")
+            ->orderByDesc("price")
+            ->limit(3)
+            ->get()
+        );
+
+        return $data;
     }
 }

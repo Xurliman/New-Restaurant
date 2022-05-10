@@ -33,7 +33,7 @@ class CommentsController extends Controller
 
     public function index()
     {
-        $comments = UserResource::collection(User::with("comments")->get());
+        $comments = CommentResource::collection(Comment::with("user")->latest()->limit(5)->get());
         return ResponseController::response($comments);
 
     }
