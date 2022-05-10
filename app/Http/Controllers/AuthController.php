@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -53,5 +54,13 @@ class AuthController extends Controller
     public function getme(Request $request)
     {
         return $request->user();
+    }
+
+    public function allUsers()
+    {
+        $users = User::select("id", "name", "phone", "role", "created_at")->get();
+        if (!$users) {
+            return ResponseController::error("Users list is empty");
+        }return ResponseController::response($users);
     }
 }

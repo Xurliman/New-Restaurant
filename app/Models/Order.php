@@ -16,9 +16,9 @@ class Order extends Model
         'count'
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:00',
-        'updated_at' => 'datetime:Y-m-d H:00',
+    protected $dates = [
+        'created_at',
+        'updated_at',
     ];
 
     public function basket(){
@@ -26,6 +26,6 @@ class Order extends Model
     }
 
     public function product(){
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class);
     }
 }

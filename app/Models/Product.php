@@ -15,7 +15,10 @@ class Product extends Model
 
     protected $casts = [
         'images'=> 'array',
-        'created_at' => 'datetime:Y-m-d H:00',
-        'updated_at' => 'datetime:Y-m-d H:00',
+    ];
+    
+    protected $dates = [
+        'created_at',
+        'updated_at',
     ];
 }

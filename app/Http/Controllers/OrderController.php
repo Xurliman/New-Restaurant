@@ -9,10 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ResponseController;
-use Faker\Provider\Base;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class OrderController extends Controller
 {

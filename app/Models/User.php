@@ -42,4 +42,9 @@ class User extends Authenticatable
         'created_at' => 'datetime:Y-m-d H:00',
         'updated_at' => 'datetime:Y-m-d H:00',
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

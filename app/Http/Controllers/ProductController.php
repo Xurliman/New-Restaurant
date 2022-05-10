@@ -27,6 +27,7 @@ class ProductController extends Controller
             'price'=>'required|numeric|min:1',
             'images'=> 'required'
         ]);
+        
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);
         }
@@ -134,5 +135,10 @@ class ProductController extends Controller
             ];
         }
         return ResponseController::response($data);
+    }
+
+    public function iRecommend()
+    {
+        
     }
 }

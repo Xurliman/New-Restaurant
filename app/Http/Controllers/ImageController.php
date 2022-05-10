@@ -16,11 +16,11 @@ class ImageController extends Controller
         $validation = Validator::make($request->all(), [
             'images'=>'required'
         ]);
-
+        
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);
         }
-
+        
         $images = $request->file("images");
         $data = [];
         foreach ($images as $value) {
