@@ -63,4 +63,12 @@ class AuthController extends Controller
             return ResponseController::error("Users list is empty");
         }return ResponseController::response($users);
     }
+
+    public function singleUser($user_id)
+    {
+        $user = User::select()->where('id', $user_id)->first();
+        if (!$user) {
+            return ResponseController::error("User not found");
+        }return ResponseController::response($user);
+    }
 }

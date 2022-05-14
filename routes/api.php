@@ -61,3 +61,5 @@ Route::get('/product', [ProductController::class, 'view']);
 Route::get('/product/{product_id}', [ProductController::class, 'singleProduct']);
 Route::get('/category/product', [ProductController::class, 'showWithCat']);
 Route::get('/recommended/products', [ProductController::class, 'iRecommend']);
+
+Route::get('/single/user/{user_id}', [AuthController::class, 'singleUser']);
